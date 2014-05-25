@@ -15,7 +15,9 @@ flatsheet.sheet(config.sheet, function (err, res){
 
   res.rows.forEach(function (row) {
     db.get(row.slug, function (err, value) {
-      if (!value) db.put(row.slug, row);
+      if (!value || JSON.stringify(value) !== JSON.stringify(row)) {
+        db.put(row.slug, row);
+      }
     });
   });
 });
