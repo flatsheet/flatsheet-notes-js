@@ -3,7 +3,7 @@
   "description": "a microblogging client for flatsheet",
   "version": "0.1.0",
   "repository": {
-    "url": "git://github.com/flatsheet/flatsheet-notes.git"
+    "url": "git://github.com/flatsheet-notes/flatsheet-notes.git"
   },
   "main": "index.js",
   "scripts": {
