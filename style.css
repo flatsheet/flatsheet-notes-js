@@ -11,13 +11,11 @@ textarea {
   font-weight: 300;
 }
 
-
 html, body {
   margin: 0px;
   padding: 0px;
   height: 100%;
 }
-
 
 *,
 *:before,
@@ -26,7 +24,6 @@ html, body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-
 
 h1,
 h2,
@@ -39,28 +36,23 @@ h6 {
   line-height: 1.5;
 }
 
-
 a {
   color: #2A8782;
   text-decoration: none;
 }
 
-
 a:hover {
   text-decoration: underline;
 }
-
 
 a:active,
 a:focus {
   color: #154240;
 }
 
-
 b {
   font-weight: 400;
 }
-
 
 pre,
 code {
@@ -119,7 +111,6 @@ input[type=password] {
   height: 45px;
 }
 
-
 .icon,
 button,
 .button,
@@ -140,7 +131,6 @@ input[type="submit"] {
   -webkit-border-radius: 0;
 }
 
-
 .icon:hover,
 button:hover,
 button:focus,
@@ -156,7 +146,6 @@ input[type="submit"]:focus {
 a.button {
   padding: 11px 10px 10px 10px;
 }
-
 
 a.button:hover {
   text-decoration: none;
@@ -190,7 +179,6 @@ header h1.site-title a {
 header h1.site-title a:hover {
   color: #000;
 }
-
 
 header ul.main-nav {
   margin: 0px;
@@ -267,9 +255,7 @@ footer {
 
 }
 
-@media (min-width: 950px) {
-
-}
+@media (min-width: 950px) {}
 
 .container:after,
 .clearfix:after {
