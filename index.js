@@ -4,12 +4,13 @@ var template = require('lodash.template');
 var flatsheet = require('flatsheet')();
 var levelup = require('levelup');
 var leveljs = require('level-js');
+var config = require('./config.json');
 
 /* set up indexeddb using levelup */
-window.db = levelup('flatsheet-notes', { db: leveljs, valueEncoding: 'json' })
+window.db = levelup(config.name, { db: leveljs, valueEncoding: 'json' })
 
 /* request data from flatsheet, plop it into indexeddb */
-flatsheet.sheet('8-p2tdw53rwzx9nvr2g5oq', function (err, res){
+flatsheet.sheet(config.sheet, function (err, res){
   if (err) return console.error(err);
 
   res.rows.forEach(function (row) {
@@ -34,7 +35,11 @@ function list () {
   db.createReadStream({})
     .on('data', function (post) { postList.push(post) })
     .on('close', function () {
-      var listEl = createEl('post-list', postListSource, { posts: postList });
+      var data = {
+        baseurl: config.baseurl,
+        posts: postList
+      };
+      var listEl = createEl('post-list', postListSource, data);
       mainEl.appendChild(listEl);
     });
 }
@@ -50,7 +55,12 @@ function post (post) {
     if (err) post = errorMsg;
     else post = value;
 
-    var postEl = createEl('post', postSource, { post: post });
+    var data = { 
+      baseurl: config.baseurl,
+      post: post
+    };
+
+    var postEl = createEl('post', postSource, data);
     mainEl.appendChild(postEl);
   });
 }

@@ -204,18 +204,31 @@ footer {
 }
 
 .share {
-  text-align: center;
+  margin-top: 10px;
 }
 
 .share a {
-  margin: 0px 5px;
-  padding: 5px 8px;
-  background-color: #f2f2f0;
+  margin: 0px;
+  padding: 5px 0px 5px 0px;
   line-height: 2.5;
+  text-align: center;
+  font-size: 13px;
+  color: #b2b2b0;
+}
+
+.share a:hover {
+  background-color: #f2f2f0;
+  border-radius: 2px;
+  color: #2A8782;
+}
+
+.share i {
+  width: 30px;
+  height: 30px;
 }
 
 #post-list .post {
-  padding-bottom: 20px;
+  padding-bottom: 0px;
   border-bottom: 1px solid #e2e2e2;
   margin-bottom: 40px;
 }
