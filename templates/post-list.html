@@ -1,0 +1,12 @@
+<% posts.forEach(function (item) { %>
+  <% var post = item.value; %>
+  <div class="post">
+    <h2 class="post-title">
+      <a href="/#/<%= post.slug %>" alt="<%= post.title %>">#</a>
+      <%= post.title %>
+    </h2>
+    <div class="post-content">
+      <%= post.content %>
+    </div>
+  </div>
+<% }); %>
