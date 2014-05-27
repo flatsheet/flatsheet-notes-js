@@ -21,7 +21,9 @@ Edit the config.json file to add the app name (lowercase with dashes), the baseu
 
 ## How to use flatsheet-notes-js
 
-My plan is to use this for simple links + narrative sites, notebooks of important links about specific topics. It's inspired by sites like [Quartz's Glass](http://glass.qz.com/). 
+My plan is to use this for simple links + narrative sites, notebooks of important links about specific topics. It's inspired by sites like [Quartz's Glass](http://glass.qz.com/).
+
+The approach this project uses (content loaded by browser javascript) isn't great if you require your microblog to be indexed by search engines, but for this kind of project, that may not actually be a requirement. (Also: [search engines may be getting better at rendering js-heavy sites](http://googlewebmastercentral.blogspot.de/2014/05/understanding-web-pages-better.html))
 
 ## Set up
 - Fork this repository
