@@ -7,6 +7,7 @@ var paganate = require('paganate');
 var eve = require('dom-events');
 var elClass = require('element-class');
 var removeEl = require('remove-elements');
+var async = require('contra');
 var config = require('./config.json');
 
 /* set optional host, token options from config */
@@ -52,40 +53,45 @@ var postSource = fs.readFileSync('templates/post.html', 'utf8');
 function list () {
   removeEl('.post-show');
   elClass(getItemsEl).remove('hidden');
-  page.page(0);
-  if (!total) requestData();    
+  requestData(function () {
+    page.page(0);
+  });    
 }
 
 /* function for post show route */
 function post (postSlug) {
   elClass(getItemsEl).add('hidden');
   removeEl('.post-list');
-  var keyStream = db.createKeyStream();
 
-  keyStream.on('data', function (key) {
-    if (postSlug === key.split('_')[1]) {
-      db.get(key, function (err, value) {
-        var post;
+  var i = 0;
+  db.createReadStream({ keys: true })
+    .on('data', function (item) {
+      i++;
 
-        if (err) post = { title: 'Not Found', content: 'something went wrong' };
-        else post = value;
+      if (postSlug === item.key.split('_')[1]) {
+        db.get(item.key, function (err, value) {
+          var post;
 
-        var data = { 
-          baseurl: config.baseurl,
-          post: post
-        };
+          if (err) post = { title: 'Not Found', content: 'something went wrong' };
+          else post = value;
 
-        var postEl = createEl('post-show', postSource, data);
-        mainEl.appendChild(postEl);
-      });
-    }
+          var data = { 
+            baseurl: config.baseurl,
+            post: post
+          };
 
-    keyStream.on('error', function (err) {
-      requestData(function(){
-        router.setRoute(postSlug);
-      });
+          var postEl = createEl('post-show', postSource, data);
+          mainEl.appendChild(postEl);
+        });
+      }
+    })
+    .on('close', function (err) {
+      if (i === 0) {
+        requestData(function(){
+          location.reload();
+        });
+      }
     });
-  });
 }
 
 /* set up routes of the app */
@@ -107,7 +113,7 @@ if (router.getRoute() == '') router.setRoute('/');
 */
 
 /* request data from flatsheet, plop it into indexeddb */
-function requestData (cb) {
+function requestData (callback) {
   flatsheet.sheet(config.sheet, function (error, response){
     if (error) cb(error);
 
@@ -115,17 +121,22 @@ function requestData (cb) {
     var rows = response.rows.reverse();
     total = rows.length;
 
-    rows.forEach(function (row, i) {
+    async.each(rows, iterator, done);
+
+    function iterator (row, i, cb) {
       var slug = i + '_' + row.slug;
 
       db.get(slug, function (err, value) {
         if (!value || JSON.stringify(value) !== JSON.stringify(row)) {
           db.put(slug, row);
         }
+        cb();
       });
-    });
+    }
 
-    if (cb) cb();
+    function done () {
+      if (callback) callback();
+    }
   });
 }
 

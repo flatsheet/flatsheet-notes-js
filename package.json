@@ -1,7 +1,7 @@
 {
   "name": "flatsheet-notes",
   "description": "a microblogging client for flatsheet",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": {
     "url": "git://github.com/flatsheet/flatsheet-notes-js.git"
   },
@@ -22,7 +22,8 @@
     "paganate": "0.0.3",
     "dom-events": "^0.1.1",
     "element-class": "^0.1.1",
-    "remove-elements": "^0.1.0"
+    "remove-elements": "^0.1.0",
+    "contra": "^1.6.3"
   },
   "devDependencies": {
     "brfs": "^1.1.1",
