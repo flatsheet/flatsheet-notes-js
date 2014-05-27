@@ -115,7 +115,7 @@ if (router.getRoute() == '') router.setRoute('/');
 /* request data from flatsheet, plop it into indexeddb */
 function requestData (callback) {
   flatsheet.sheet(config.sheet, function (error, response){
-    if (error) cb(error);
+    if (error) callback(error);
 
     /* rows are ordered by when they were made, so reverse them to get newest first */
     var rows = response.rows.reverse();
