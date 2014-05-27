@@ -62,6 +62,7 @@ function list () {
 function post (postSlug) {
   elClass(getItemsEl).add('hidden');
   removeEl('.post-list');
+  removeEl('.post-show');
 
   var i = 0;
   db.createReadStream({ keys: true })
