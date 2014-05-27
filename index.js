@@ -108,13 +108,12 @@ if (router.getRoute() == '') router.setRoute('/');
 
 /* request data from flatsheet, plop it into indexeddb */
 function requestData (cb) {
-  flatsheet.sheet(config.sheet, function (err, res){
-    if (err) cb(err);
-
-    total = res.rows.length;
+  flatsheet.sheet(config.sheet, function (error, response){
+    if (error) cb(error);
 
     /* rows are ordered by when they were made, so reverse them to get newest first */
-    var rows = res.rows.reverse();
+    var rows = response.rows.reverse();
+    total = rows.length;
 
     rows.forEach(function (row, i) {
       var slug = i + '_' + row.slug;
@@ -124,8 +123,8 @@ function requestData (cb) {
           db.put(slug, row);
         }
       });
-
     });
+
     if (cb) cb();
   });
 }
