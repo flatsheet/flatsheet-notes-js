@@ -1,5 +1,7 @@
 {
   "name": "flatsheet-notes",
   "baseurl": "http://flatsheet.io/flatsheet-notes-js/",
-  "sheet": "8-p2tdw53rwzx9nvr2g5oq"
+  "sheet": "8-p2tdw53rwzx9nvr2g5oq",
+  "host": "",
+  "token": ""
 }

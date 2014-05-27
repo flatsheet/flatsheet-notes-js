@@ -1,10 +1,17 @@
 var fs = require('fs');
 var director = require('director');
 var template = require('lodash.template');
-var flatsheet = require('flatsheet')();
 var levelup = require('levelup');
 var leveljs = require('level-js');
 var config = require('./config.json');
+
+/* set optional host, token options from config */
+var opts = {};
+if (config.host) opts.host = config.host;
+if (config.token) opts.token = config.token;
+
+/* initialize flatsheet with options */
+var flatsheet = require('flatsheet')(opts);
 
 /* set up indexeddb using levelup */
 window.db = levelup(config.name, { db: leveljs, valueEncoding: 'json' })
