@@ -2,6 +2,6 @@
   "name": "flatsheet-notes",
   "baseurl": "http://flatsheet.io/flatsheet-notes-js/",
   "sheet": "8-p2tdw53rwzx9nvr2g5oq",
-  "host": "",
-  "token": ""
+  "limit": 5,
+  "host": ""
 }

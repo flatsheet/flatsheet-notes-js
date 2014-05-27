@@ -1,7 +1,7 @@
 {
   "name": "flatsheet-notes",
   "description": "a microblogging client for flatsheet",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "repository": {
     "url": "git://github.com/flatsheet/flatsheet-notes-js.git"
   },
@@ -16,10 +16,13 @@
   "dependencies": {
     "flatsheet": "^0.2.2",
     "lodash.template": "^2.4.1",
-    "client-router": "0.0.0",
     "director": "^1.2.3",
     "level-js": "^2.1.4",
-    "levelup": "^0.18.3"
+    "levelup": "^0.18.3",
+    "paganate": "0.0.3",
+    "dom-events": "^0.1.1",
+    "element-class": "^0.1.1",
+    "remove-elements": "^0.1.0"
   },
   "devDependencies": {
     "brfs": "^1.1.1",

@@ -244,13 +244,32 @@ footer {
   line-height: 1.8;
 }
 
+#get-items {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  text-align: center;
+  background-color: #f4f4f2;
+  border: 1px solid #e2e2e0;
+  border-radius: 2px;
+  color: #646462;
+  font-weight: 600;
+}
+
+#get-items:hover {
+  background-color: #f8f8f6;
+  color: #333;
+}
+
+.hidden {
+  text-indent: -9999px;
+  visibility: hidden;
+  display: none;
+}
+
 .container {
   width: 90%;
   margin: 0px auto;
-}
-
-#mce-EMAIL {
-  width: 275px;
 }
 
 @media (min-width: 700px) {

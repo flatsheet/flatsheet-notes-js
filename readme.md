@@ -13,7 +13,7 @@ The approach this project uses (content loaded by browser javascript) isn't grea
 - Clone your fork to your local computer
 - Create an account and sheet at [flatsheet.io](http://app.flatsheet.io)
 - Run `npm install` inside the project folder
-- Edit config.json to change the `name`, `baseurl`, and `sheet` properties.
+- Edit config.json to change the `name`, `baseurl`, `sheet`, `limit`, `host`, and `token` properties.
 - Edit index.html and style.css to revise project name, css, and other project-specific details
 - Commit your changes and push to your fork
 
@@ -30,13 +30,19 @@ The slug field needs to contain strings that are a version of the title all in l
 
 ### config.json
 
-Edit the config.json file to add the app name (lowercase with dashes), the baseurl of your app, and the sheet slug from flatsheet.io
+Edit the config.json file to add the app name, the baseurl of your app, and the sheet slug from flatsheet.io.
+
+You can also set the `limit`, which controls how many items are shown in the pagination.
+
+Optionally, if you have your own instance of flatsheet running, you can set the `host` to that app's url.
 
 ```
 {
   "name": "flatsheet-notes",
   "baseurl": "http://flatsheet.io/flatsheet-notes-js/",
-  "sheet": "8-p2tdw53rwzx9nvr2g5oq'"
+  "sheet": "8-p2tdw53rwzx9nvr2g5oq'",
+  "limit": 5,
+  "host": ""
 }
 ```
 

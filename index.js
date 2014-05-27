@@ -3,31 +3,43 @@ var director = require('director');
 var template = require('lodash.template');
 var levelup = require('levelup');
 var leveljs = require('level-js');
+var paganate = require('paganate');
+var eve = require('dom-events');
+var elClass = require('element-class');
+var removeEl = require('remove-elements');
 var config = require('./config.json');
 
 /* set optional host, token options from config */
 var opts = {};
 if (config.host) opts.host = config.host;
-if (config.token) opts.token = config.token;
 
 /* initialize flatsheet with options */
 var flatsheet = require('flatsheet')(opts);
 
+/* set number of posts per page for pagination */
+var limit = config.limit;
+var total;
+
+/* initialize pagination */
+var page = paganate({ limit: limit });
+
+/* listen for page event to page through items */
+page.on('page', function (page, offset) {
+  /* get items from the local db */
+  getItems(offset);
+});
+
+/* find the #get-items button */
+var getItemsEl = document.getElementById('get-items');
+
+/* listen for click event on #get-items button */
+eve.on(getItemsEl, 'click', function(e) {
+  page.next();
+  e.preventDefault();
+});
+
 /* set up indexeddb using levelup */
 window.db = levelup(config.name, { db: leveljs, valueEncoding: 'json' })
-
-/* request data from flatsheet, plop it into indexeddb */
-flatsheet.sheet(config.sheet, function (err, res){
-  if (err) return console.error(err);
-
-  res.rows.forEach(function (row) {
-    db.get(row.slug, function (err, value) {
-      if (!value || JSON.stringify(value) !== JSON.stringify(row)) {
-        db.put(row.slug, row);
-      }
-    });
-  });
-});
 
 /* find #main-content */
 var mainEl = document.getElementById('main-content');
@@ -38,39 +50,41 @@ var postSource = fs.readFileSync('templates/post.html', 'utf8');
 
 /* function for root route */
 function list () {
-  removeEl('post');
-  var postList = [];
-
-  db.createReadStream({})
-    .on('data', function (post) { postList.push(post) })
-    .on('close', function () {
-      var data = {
-        baseurl: config.baseurl,
-        posts: postList
-      };
-      var listEl = createEl('post-list', postListSource, data);
-      mainEl.appendChild(listEl);
-    });
+  removeEl('.post-show');
+  elClass(getItemsEl).remove('hidden');
+  page.page(0);
+  if (!total) requestData();    
 }
 
 /* function for post show route */
-function post (post) {
-  removeEl('post-list');
+function post (postSlug) {
+  elClass(getItemsEl).add('hidden');
+  removeEl('.post-list');
+  var keyStream = db.createKeyStream();
 
-  db.get(post, function (err, value) {
-    var errorMsg = { title: 'Not Found', content: 'something went wrong' };
-    var post;
+  keyStream.on('data', function (key) {
+    if (postSlug === key.split('_')[1]) {
+      db.get(key, function (err, value) {
+        var post;
 
-    if (err) post = errorMsg;
-    else post = value;
+        if (err) post = { title: 'Not Found', content: 'something went wrong' };
+        else post = value;
 
-    var data = { 
-      baseurl: config.baseurl,
-      post: post
-    };
+        var data = { 
+          baseurl: config.baseurl,
+          post: post
+        };
 
-    var postEl = createEl('post', postSource, data);
-    mainEl.appendChild(postEl);
+        var postEl = createEl('post-show', postSource, data);
+        mainEl.appendChild(postEl);
+      });
+    }
+
+    keyStream.on('error', function (err) {
+      requestData(function(){
+        router.setRoute(postSlug);
+      });
+    });
   });
 }
 
@@ -92,18 +106,60 @@ if (router.getRoute() == '') router.setRoute('/');
 * helper functions
 */
 
+/* request data from flatsheet, plop it into indexeddb */
+function requestData (cb) {
+  flatsheet.sheet(config.sheet, function (err, res){
+    if (err) cb(err);
+
+    total = res.rows.length;
+
+    res.rows.forEach(function (row, i) {
+      var slug = i + '_' + row.slug;
+
+      db.get(slug, function (err, value) {
+        if (!value || JSON.stringify(value) !== JSON.stringify(row)) {
+          db.put(slug, row);
+        }
+      });
+
+    });
+    if (cb) cb();
+  });
+}
+
+/* get items from indexeddb based on pagination offset */
+function getItems (offset) {
+  var postList = [];
+
+  var stream = db.createReadStream({ 
+    start: offset, 
+    end: offset + limit, 
+    limit: limit
+  });
+
+  stream.on('data', function (post) { 
+    postList.push(post);
+  });
+
+  stream.on('close', function () {
+    var data = {
+      baseurl: config.baseurl,
+      posts: postList
+    };
+
+    var listEl = createEl('post-list', postListSource, data);
+    mainEl.appendChild(listEl);
+
+    if (total <= offset + limit) elClass(getItemsEl).add('hidden');
+  });
+}
+
 /* create the html for a view */
-function createEl (id, source, data) {
+function createEl (slug, source, data) {
   var compiled = template(source);
   var html = compiled(data);
   var el = document.createElement('div');
-  el.id = id;
+  el.className = slug;
   el.innerHTML = html;
   return el;
-}
-
-/* remove view parent element */
-function removeEl (el) {
-  var element = document.getElementById(el);
-  if (element) element.parentNode.removeChild(element);
 }
