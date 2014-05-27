@@ -12,7 +12,7 @@ The approach this project uses (content loaded by browser javascript) isn't grea
 - Fork this repository
 - Clone your fork to your local computer
 - Create an account and sheet at [flatsheet.io](http://app.flatsheet.io)
-- Run npm install inside the project folder
+- Run `npm install` inside the project folder
 - Edit config.json to change the `name`, `baseurl`, and `sheet` properties.
 - Edit index.html and style.css to revise project name, css, and other project-specific details
 - Commit your changes and push to your fork
@@ -28,7 +28,7 @@ Your sheet at flatsheet.io must have title, content, and slug fields.
 The slug field needs to contain strings that are a version of the title all in lowercase and separated by dashes.
 
 
-## config.json
+### config.json
 
 Edit the config.json file to add the app name (lowercase with dashes), the baseurl of your app, and the sheet slug from flatsheet.io
 
