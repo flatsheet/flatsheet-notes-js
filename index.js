@@ -113,7 +113,10 @@ function requestData (cb) {
 
     total = res.rows.length;
 
-    res.rows.forEach(function (row, i) {
+    /* rows are ordered by when they were made, so reverse them to get newest first */
+    var rows = res.rows.reverse();
+
+    rows.forEach(function (row, i) {
       var slug = i + '_' + row.slug;
 
       db.get(slug, function (err, value) {
